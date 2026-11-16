@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "My Tab Hub Pro 2.1",
+  "version": "2.1.0",
+  "description": "Organize tabs, favorites, workspaces, sessions and rediscover browsing history.",
+  "permissions": [
+    "tabs",
+    "history",
+    "storage",
+    "tabGroups",
+    "sidePanel"
+  ],
+  "action": {
+    "default_title": "Open My Tab Hub Pro",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "dashboard.html",
+  "commands": {
+    "open-dashboard": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y"
+      },
+      "description": "Open My Tab Hub dashboard"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  }
+}

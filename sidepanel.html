@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Tab Hub Pro Side Panel</title><link rel="stylesheet" href="style.css"></head>
+<body class="sidepanel"><div class="shell">
+<aside class="sidebar"><div class="brand">◈ <span>My Tab Hub <em>Pro 2.0</em></span></div><div class="subbrand">Your personal tab organizer</div>
+<nav id="nav"><button data-view="Overview">⌂ &nbsp; Overview</button><button data-view="Smart Search">⌕ &nbsp; Smart Search</button><button data-view="All Tabs">▣ &nbsp; All Tabs</button>
+<div class="nav-label">WORKSPACES</div><div id="workspaceNav"></div><button data-view="Favorites">☆ &nbsp; Favorites</button><button data-view="Sessions">▤ &nbsp; Saved Sessions</button></nav>
+<div class="sidebar-bottom"><button id="addWorkspace">＋ New Workspace</button><button data-view="Settings">⚙ &nbsp; Settings</button><p>Local-first · No account needed</p></div></aside>
+<main class="main"><header><div><h1 id="heading">Overview</h1><p id="subtitle">Organize your digital workspace.</p></div><div class="header-actions"><span class="pill">Chrome · Edge · Opera</span><button id="openPanel">◧ Side Panel</button><button id="refresh">↻ Refresh</button></div></header>
+<div class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="Search tabs, history, favorites, or workspaces… (Ctrl+K)" autocomplete="off"><button id="clearSearch" title="Clear search">×</button></div>
+<div id="stats" class="stats"></div><div id="layoutTools" class="layout-tools"><span>✥ Drag cards to rearrange</span><button id="resetLayout">Reset layout</button></div><section id="content" aria-live="polite"></section>
+<footer>My Tab Hub Pro 2.0 · History and suggestions stay on this device</footer></main></div>
+<div id="toast" role="status"></div><script src="dashboard.js"></script></body></html>
