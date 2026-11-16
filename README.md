@@ -6,7 +6,7 @@ A local-first Chromium Manifest V3 extension. Works with recent Chrome, Edge, an
 1. Unzip `my-tab-hub-pro-2-1.zip`.
 2. Chrome: visit `chrome://extensions`; Edge: `edge://extensions`; Opera: `opera://extensions`.
 3. Enable **Developer mode**.
-4. Select **Load unpacked** (wording may vary) and choose the extracted `my-tab-hub-pro-2` folder containing `manifest.json`.
+4. Select **Load unpacked** (wording may vary) and choose the extracted `my-tab-hub-pro-2-1` folder containing `manifest.json`.
 5. Pin the extension and click its icon, then **Open Dashboard**.
 
 ## Features

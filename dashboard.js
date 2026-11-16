@@ -28,7 +28,7 @@ async function init(){
  $('resetLayout').onclick=async()=>{data.layout={widgets:['workspaces','tabs','suggestions']};await save();render();toast('Layout reset')};
  $('openPanel').onclick=async()=>{try{
    if(!chrome.sidePanel?.open)throw new Error('Side panel not supported in this browser');
-   const w=await chrome.windows.getCurrent();await chrome.sidePanel.open({windowId:w.id});
+   await chrome.sidePanel.open({windowId:chrome.windows.WINDOW_ID_CURRENT});
  }catch(e){toast('Side panel unavailable here. Use the full dashboard.')}};
  document.getElementById('content').addEventListener('dragstart',e=>{
    const el=e.target.closest('[data-drag-card]');if(!el)return;
@@ -53,12 +53,12 @@ async function init(){
  });
  
  $('addWorkspace').onclick=addWorkspace;
- $('nav').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b){view=b.dataset.view;query='';$('search').value='';render()}});
+ document.querySelector('.sidebar').addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(b){view=b.dataset.view;query='';$('search').value='';render()}});
  await refresh();
  chrome.tabs.onCreated.addListener(refresh);
  chrome.tabs.onRemoved.addListener(refresh);
  chrome.tabs.onUpdated.addListener((id,info)=>{if(info.status==='complete'||info.title)refresh()});
- chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local'&&changes.hubData){data=changes.hubData.newValue;render()}});
+ chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local'&&changes.hubData){data=changes.hubData.newValue||structuredClone(DEFAULT);loadHistory().then(render).catch(e=>toast('History unavailable: '+e.message))}});
 }
 async function refresh(){
  try{tabs=(await chrome.tabs.query({})).filter(t=>t.id!==undefined && valid(t.url));}
@@ -160,6 +160,7 @@ async function addWorkspace(){
  const w=prompt('Name your new workspace:')?.trim();
  if(!w)return;
  if(data.workspaces.some(x=>x.toLowerCase()===w.toLowerCase()))return toast('Workspace already exists');
+ if(['Overview','Smart Search','All Tabs','Favorites','Sessions','Settings'].some(x=>x.toLowerCase()===w.toLowerCase()))return toast('Choose a different workspace name');
  if(w.length>40)return toast('Use a name under 40 characters');
  data.workspaces.push(w);await save();setView(w);
 }
@@ -188,8 +189,8 @@ async function action(e){
  }
  if(e.target.id==='sort'){sort=e.target.value;render();return}
  if(e.target.id==='filter'){filter=e.target.value;render();return}
- if(e.target.id==='setting-history'){data.settings.history=e.target.checked;await save();await loadHistory();render();return}
- if(e.target.id==='setting-suggestions'){data.settings.suggestions=e.target.checked;await save();render();return}
+ if(e.target.id==='setting-history'&&e.type==='change'){data.settings.history=e.target.checked;await save();await loadHistory();render();return}
+ if(e.target.id==='setting-suggestions'&&e.type==='change'){data.settings.suggestions=e.target.checked;await save();render();return}
  const b=e.target.closest('[data-act]');if(!b)return;
  const act=b.dataset.act,id=Number(b.dataset.id),url=b.dataset.url,i=Number(b.dataset.index);
  try{
@@ -203,6 +204,7 @@ async function action(e){
   if(act==='close'&&confirm('Close this browser tab?'))await chrome.tabs.remove(id);
   if(act==='restore-session'){
    const s=data.sessions[i];if(!s)return;
+   if(!s.urls.some(valid))return toast('This session has no restorable website tabs');
    if(!confirm(`Open ${s.urls.length} tabs from "${s.name}" in a new window?`))return;
    await chrome.windows.create({url:s.urls.filter(valid).slice(0,200)});toast('Session restored');
   }
